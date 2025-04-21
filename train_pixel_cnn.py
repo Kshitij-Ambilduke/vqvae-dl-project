@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from pixel_cnn_model import PixelCNN
+from pixelcnn.pixel_cnn_model import PixelCNN
 from tqdm import tqdm
 import argparse
 import torch.nn.functional as F
