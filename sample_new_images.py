@@ -15,9 +15,9 @@ def load_pixelcnn_model(model_path):
     model.eval()
     return model
 
-def load_vqvae_model(vqvae_path):
+def load_vqvae_model(vqvae_path, args):
     vqvae = VQVAE(
-        in_channels=1,
+        in_channels=args.in_channels,
         num_embeddings=512,
         embedding_dim=64,
         beta=0.25
@@ -44,13 +44,14 @@ def main():
     parser.add_argument('--pixelcnn_path', type=str, required=True, help='Path to the PixelCNN model')
     parser.add_argument('--vqvae_path', type=str, required=True, help='Path to the VQVAE model')
     parser.add_argument('--output_dir', type=str, required=True, help='Output dir')
+    parser.add_argument('--in_channels', type=int, default=1, help='Batch size for sampling')
     args = parser.parse_args()
 
     os.makedirs(args.output_dir, exist_ok=True)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     pixelcnn = load_pixelcnn_model(args.pixelcnn_path).to(device)
-    vqvae = load_vqvae_model(args.vqvae_path).to(device)
+    vqvae = load_vqvae_model(args.vqvae_path, args).to(device)
 
     # Generate and decode samples
     for time in range(5):
@@ -61,7 +62,10 @@ def main():
     # Plot generated images
         fig, axes = plt.subplots(1, 10, figsize=(20, 2))
         for i in range(10):
-            axes[i].imshow(generated[i].squeeze().numpy()*0.5+0.5, cmap='gray')
+            if generated[i].shape[0] == 1:
+                axes[i].imshow(generated[i].squeeze().numpy()*0.5+0.5)
+            else:
+                axes[i].imshow(generated[i].permute(1,2,0).squeeze().numpy()*0.5+0.5)
             axes[i].axis('off')
         plt.savefig(f"{args.output_dir}/newly_sample_images/generated_samples_{time+1}.png")
     
