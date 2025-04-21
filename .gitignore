@@ -1,3 +1,5 @@
 vqvae_output_dir/
 pixel_cnn_output_dir/
 data/
+vqvae_output_dir_fm/
+pixel_cnn_output_dir_fm/

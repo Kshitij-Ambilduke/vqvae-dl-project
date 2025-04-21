@@ -14,8 +14,8 @@ def main():
     parser.add_argument('--embedding_dim', type=int, default=64, help='Dimension of the embedding space')
     parser.add_argument('--num_embeddings', type=int, default=512, help='Number of embeddings')
     parser.add_argument('--beta', type=float, default=0.25, help='Commitment cost for VQ-VAE')
-    parser.add_argument('--lr', type=float, default=1e-3, help='Learning rate for the optimizer')
-    parser.add_argument('--num_epochs', type=int, default=3, help='Number of epochs to train the model')
+    parser.add_argument('--lr', type=float, default=3e-4, help='Learning rate for the optimizer')
+    parser.add_argument('--num_epochs', type=int, default=10, help='Number of epochs to train the model')
     parser.add_argument('--output_dir', type=str, default='output', help='Directory to save the model and results')
     
     
@@ -35,6 +35,7 @@ def main():
     else:
         in_channels = 3
 
+    print("Number of input channels: ",in_channels)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # Initialize the VQVAE model
     model  = VQVAE(
@@ -110,9 +111,16 @@ def main():
     
         fig, axes = plt.subplots(2, 10, figsize=(20, 4))
         for i in range(10):
-            axes[0, i].imshow(fixed_test[i].cpu().squeeze().numpy() * 0.5 + 0.5, cmap='gray')
+            if fixed_test[i].shape[0] == 1:
+                axes[0, i].imshow(fixed_test[i].cpu().squeeze().numpy() * 0.5 + 0.5)
+            else:
+                axes[0, i].imshow(fixed_test[i].cpu().permute(1, 2, 0).numpy() * 0.5 + 0.5)
             axes[0, i].axis('off')
-            axes[1, i].imshow(recon_images[i].cpu().squeeze().numpy() * 0.5 + 0.5, cmap='gray')
+            
+            if fixed_test[i].shape[0] == 1:
+                axes[1, i].imshow(recon_images[i].cpu().squeeze().numpy() * 0.5 + 0.5)
+            else:
+                axes[1, i].imshow(recon_images[i].cpu().permute(1, 2, 0).numpy() * 0.5 + 0.5)
             axes[1, i].axis('off')
 
         plt.suptitle(f'Epoch {epoch+1} Reconstructions')
