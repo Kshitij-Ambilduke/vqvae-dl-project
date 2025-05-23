@@ -1,6 +1,6 @@
 # Implementation of Vector Quantized Variational Auto-encoder (VQ-VAE)
 
-### Report: [https://drive.google.com/file/d/19C-hUncvtCInUwkIhJ7ArrRQYpZTtlNl/view?usp=sharing]([Link])
+### Report: [[Link]](https://drive.google.com/file/d/19C-hUncvtCInUwkIhJ7ArrRQYpZTtlNl/view?usp=sharing)
 
 ### For training VQ-VAE:
 ```bash
