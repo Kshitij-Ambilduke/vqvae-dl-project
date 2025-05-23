@@ -1,5 +1,7 @@
 # Implementation of Vector Quantized Variational Auto-encoder (VQ-VAE)
 
+### Report: [https://drive.google.com/file/d/19C-hUncvtCInUwkIhJ7ArrRQYpZTtlNl/view?usp=sharing]([Link])
+
 ### For training VQ-VAE:
 ```bash
 python train_vqvae.py --output_dir vqvae_output_dir
